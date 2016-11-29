@@ -31,9 +31,6 @@
 #ifndef AD_MACROS_H
 #include <ad/core/macros.h>
 #endif
-#ifndef AD_DOCUMENT_H
-#include <ad/core/document.h>
-#endif
 #ifndef AD_BLOCK_H
 #include <ad/core/block.h>
 #endif
@@ -42,6 +39,11 @@
 #endif
 #ifndef AD_LIST_H
 #include <ad/core/list.h>
+#endif
+#ifndef AD_CROSSREF_H
+#endif
+#ifndef AD_DOCUMENT_H
+#include <ad/core/document.h>
 #endif
 
 #endif

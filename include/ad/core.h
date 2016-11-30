@@ -31,11 +31,29 @@
 #ifndef AD_MACROS_H
 #include <ad/core/macros.h>
 #endif
+#ifndef AD_RANGE_H
+#include <ad/core/range.h>
+#endif
+#ifndef AD_UNIT_H
+#include <ad/core/unit.h>
+#endif
+#ifndef AD_INLINE_H
+#include <ad/core/inline.h>
+#endif
 #ifndef AD_BLOCK_H
 #include <ad/core/block.h>
 #endif
 #ifndef AD_CONTAINER_H
 #include <ad/core/container.h>
+#endif
+#ifndef AD_TEXT_H
+#include <ad/core/text.h>
+#endif
+#ifndef AD_HEADER_H
+#include <ad/core/header.h>
+#endif
+#ifndef AD_PARAGRAPH_H
+#include <ad/core/paragraph.h>
 #endif
 #ifndef AD_LIST_H
 #include <ad/core/list.h>

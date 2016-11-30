@@ -28,7 +28,7 @@
 #ifndef AD_MACROS_H
 #define AD_MACROS_H
 
-/**
+/*
  * Allow including our library from C++ code
  */
 #ifdef __cplusplus
@@ -37,6 +37,20 @@
 #else
 #define AD_BEGIN_DECLS
 #define AT_END_DECLS
+#endif
+
+
+/* Provide definitions for some commonly used macros.
+ *  Some of them are only provided if they haven't already
+ *  been defined. It is assumed that if they are already
+ *  defined then the current definition is correct.
+ */
+#ifndef NULL
+#  ifdef __cplusplus
+#  define NULL        (0L)
+#  else /* !__cplusplus */
+#  define NULL        ((void*) 0)
+#  endif /* !__cplusplus */
 #endif
 
 

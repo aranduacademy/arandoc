@@ -1,31 +1,24 @@
 #include <ad/core.h>
 
-uint64_t
-ad_block_get_start(ADBlock* block){
-  return block->range.start;
+/* ----------------------------------------------------------------------------
+ * PUBLIC FUNCTIONS
+ * --------------------------------------------------------------------------*/
+uint16_t
+ad_block_get_n_inlines(ADBlock* block){
+  return block->n_inlines;
 }
 
-uint64_t
-ad_block_get_end(ADBlock* block){
-  return block->range.end;
+ADInline*
+ad_block_get(ADBlock* block, uint16_t index){
+  uint16_t i = 0;
+  ADInlineList* listitem = block->inlines;
+  while(i < index && listitem != NULL){
+    listitem = listitem->next;
+  }
+  return listitem->item;
 }
 
-uint32_t
-ad_block_get_start_x(ADBlock* block){
-  return block->loc.start.x;
-}
-
-uint32_t
-ad_block_get_start_y(ADBlock* block){
-  return block->loc.start.y;
-}
-
-uint32_t
-ad_block_get_end_x(ADBlock* block){
-  return block->loc.end.x;
-}
-
-uint32_t
-ad_block_get_end_y(ADBlock* block){
-  return block->loc.end.y;
+ADInlineList*
+ad_block_get_list(ADBlock* block){
+  return block->inlines;
 }

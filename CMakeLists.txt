@@ -29,10 +29,22 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # ===================================================================== LIBRARY
 
 set(LIB_HDRS
-  version.h macros.h    arandoc.h   crossref.h listitem.h equationinline.h
-  list.h    paragraph.h text.h      block.h    document.h  equation.h
-  container.h figure.h  link.h      subfigure.h)
-set(LIB_SRCS arandoc.c block.c container.c document.c)
+  version.h macros.h   range.h                                    # Library utils
+  block.h   inline.h   container.h unit.h                         # Structural basis
+  link.h    figure.h   subfigure.h strong.h emphasis.h eqinline.h # Inlines
+  text.h    codespan.h
+
+  header.h paragraph.h linkdef.h equation.h # leaf blocks
+
+  list.h listitem.h quote.h document.h # container blocks
+)
+set(LIB_SRCS
+  arandoc.c
+  block.c unit.c container.c
+
+  header.c
+
+  document.c)
 
 foreach(LIB_HDR ${LIB_HDRS})
   list(APPEND LIB_HDRS_ABS ${CMAKE_CURRENT_SOURCE_DIR}/include/ad/core/${LIB_HDR})

@@ -26,51 +26,49 @@
 #include <stdint.h>
 #include <ad/core.h>
 
+void
+test_unit(ADUnit* unit, ADUnit *gt){
+  g_assert_cmpuint(ad_unit_get_start  (unit),==,ad_unit_get_start(gt));
+  g_assert_cmpuint(ad_unit_get_end    (unit),==,ad_unit_get_end(gt));
+  g_assert_cmpuint(ad_unit_get_start_x(unit),==,ad_unit_get_start_x(gt));
+  g_assert_cmpuint(ad_unit_get_start_y(unit),==,ad_unit_get_start_y(gt));
+  g_assert_cmpuint(ad_unit_get_end_x  (unit),==,ad_unit_get_end_x(gt));
+  g_assert_cmpuint(ad_unit_get_end_y  (unit),==,ad_unit_get_end_y(gt));
+}
+
 static void
 test_parse(){
-  char* texto          = "# oi\nTudo bom?";
-  ADDocument* document = ad_document_new_from_text(texto, 14);
+  char texto[]          = "# oi\nTudo bom?";
+  ADDocument* document  = ad_document_new_from_text(texto, 14);
+  ADUnit document_unit  = {0,14,0,0,8,1};
+  ADUnit header_unit    = {2,4,2,0,4,0};
+  ADUnit paragraph_unit = {5,14,0,1,8,1};
 
-  // Range tests
-  g_assert_cmpuint(ad_block_get_start  (AD_BLOCK(document)),==, 0);
-  g_assert_cmpuint(ad_block_get_end    (AD_BLOCK(document)),==,14);
-  g_assert_cmpuint(ad_block_get_start_x(AD_BLOCK(document)),==, 0);
-  g_assert_cmpuint(ad_block_get_start_y(AD_BLOCK(document)),==, 0);
-  g_assert_cmpuint(ad_block_get_end_x  (AD_BLOCK(document)),==, 8);
-  g_assert_cmpuint(ad_block_get_end_y  (AD_BLOCK(document)),==, 1);
 
-  // Children tests
-  g_assert_cmpuint(ad_container_get_n_children(document),==, 2);
-  g_assert_cmpuint(ad_container_get(document,0)->type,==, AD_TYPE_HEADER);
-  g_assert_cmpuint(ad_container_get(document,1)->type,==, AD_TYPE_PARAGRAPH);
+  // This document is a block with 14 chars, 2 lines, from (0,0) to (1,8)
+  test_unit(AD_UNIT(document), &document_unit);
 
-  // # oi
-  ADHeader* header = ad_container_get(document,0);
-  g_assert_cmpuint(header->depth,==,1);
-  g_assert_cmpuint(header->n_children,==,1);
-  // oi
-  g_assert_cmpuint(header->children[0].type,==,AD_TYPE_TEXT);
-  ADText* text = header->children[0];
-  g_assert_cmpuint(text->range.start, ==, 2);
-  g_assert_cmpuint(text->range.end  , ==, 4);
-  g_assert_cmpuint(text->loc.start.x, ==, 2);
-  g_assert_cmpuint(text->loc.start.y, ==, 0);
-  g_assert_cmpuint(text->loc.end.x  , ==, 4);
-  g_assert_cmpuint(text->loc.end.y  , ==, 0);
+  // ... and it's a container block with two leaf blocks (a header and a paragraph)
+  g_assert_cmpuint(ad_container_get_n_blocks(AD_CONTAINER(document)),==, 2);
+  g_assert_cmpuint(ad_unit_get_type(AD_UNIT(ad_container_get(AD_CONTAINER(document),0))),==, AD_TYPE_HEADER);
+  g_assert_cmpuint(ad_unit_get_type(AD_UNIT(ad_container_get(AD_CONTAINER(document),1))),==, AD_TYPE_PARAGRAPH);
+
+  // We test the header # oi which has 1 inline (the text 'oi')
+  ADHeader* header = AD_HEADER(ad_container_get(AD_CONTAINER(document),0));
+  g_assert_cmpuint(ad_header_get_depth(header)             ,==,1);
+  g_assert_cmpuint(ad_block_get_n_inlines(AD_BLOCK(header)),==,1);
+  // Testing the text inline 'oi'
+  g_assert_cmpuint(ad_unit_get_type(AD_UNIT(ad_block_get(AD_BLOCK(header),0))),==,AD_TYPE_TEXT);
+  ADText* text = AD_TEXT(ad_block_get(AD_BLOCK(header),0));
+  test_unit(AD_UNIT(text),&header_unit);
 
   // Tudo bom? (paragraph)
-  ADParagraph* paragraph = document->children[1];
-  g_assert_cmpuint(paragraph->n_children, ==, 1);
+  ADParagraph* paragraph = AD_PARAGRAPH(ad_container_get(AD_CONTAINER(document),1));
+  g_assert_cmpuint(ad_block_get_n_inlines(AD_BLOCK(paragraph)), ==, 1);
   // Tudo bom? (text)
-  g_assert_cmpuint(paragraph->children[0].type,==,AD_TYPE_TEXT);
-  ADText* text = paragraph->children[0];
-  g_assert_cmpuint(text->range.start, ==,  5);
-  g_assert_cmpuint(text->range.end  , ==, 14);
-  g_assert_cmpuint(text->loc.start.x, ==,  0);
-  g_assert_cmpuint(text->loc.start.y, ==,  1);
-  g_assert_cmpuint(text->loc.end.x  , ==,  8);
-  g_assert_cmpuint(text->loc.end.y  , ==,  1);
-
+  g_assert_cmpuint(ad_unit_get_type(AD_UNIT(ad_block_get(AD_BLOCK(paragraph),0))),==,AD_TYPE_TEXT);
+  text = AD_TEXT(ad_block_get(AD_BLOCK(paragraph),0));
+  test_unit(AD_UNIT(text),&paragraph_unit);
 }
 
 int
@@ -79,4 +77,5 @@ main(int argc, char* argv[]){
   g_test_init(&argc, &argv, NULL);
   g_test_bug_base("https://github.com/aranduacademy/arandoc/issues/");
   g_test_add_func("/arandoc/test_parse", test_parse);
+  return g_test_run();
 }

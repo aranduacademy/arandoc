@@ -25,50 +25,14 @@
 #error "Only <ad/core.h> can be included directly."
 #endif
 
-#ifndef AD_CONTAINER_H
-#define AD_CONTAINER_H
-
-#include <stdint.h>
+#ifndef AD_INLINE_H
+#define AD_INLINE_H
 #include <ad/core.h>
 
-#define AD_CONTAINER(x) ((ADContainer*)x)
+#define AD_INLINE(x) ((ADInline*)x)
 
-typedef struct ADBlockList ADBlockList;
-struct ADBlockList{
-  ADBlock     *block;
-  ADBlockList *prev;
-  ADBlockList *next;
-};
-
-typedef struct ADContainer{
-  ADBlock      super;
-  ADBlockList* list;
-  uint16_t     n_blocks;
-}ADContainer;
-
-/**
- * @brief Get number of blocks
- * @param container
- * @return
- */
-uint16_t
-ad_container_get_n_blocks(ADContainer* container);
-
-/**
- * @brief ad_container_get
- * @param container
- * @param index
- * @return
- */
-ADBlock*
-ad_container_get(ADContainer* container, uint16_t index);
-
-/**
- * @brief ad_container_get_list
- * @param container
- * @return
- */
-ADBlockList*
-ad_container_get_list(ADContainer* container);
+typedef struct ADInline{
+  ADUnit super;
+}ADInline;
 
 #endif

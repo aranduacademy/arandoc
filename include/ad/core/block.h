@@ -28,57 +28,58 @@
 #ifndef AD_BLOCK_H
 #define AD_BLOCK_H
 
-#include <stdint.h>
+#include <ad/core.h>
 
 #define AD_BLOCK(x) ((ADBlock*)x)
 
-typedef enum{
-  AD_TYPE_PARAGRAPH,
-  AD_TYPE_HEADER,
-  AD_TYPE_TEXT,
-  AD_TYPE_ENUMERATE,
-  AD_TYPE
-} ADBlockType;
+/* ----------------------------------------------------------------------------
+ * DATA
+ * --------------------------------------------------------------------------*/
 
-typedef struct{
-  uint64_t start;
-  uint64_t end;
-}ADRange;
+typedef struct ADBlock ADBlock;
 
-typedef struct{
-  uint32_t x;
-  uint32_t y;
-}ADCoord;
+typedef struct ADInlineList ADInlineList;
+struct ADInlineList{
+  ADInline    * item;
+  ADInlineList* next;
+  ADInlineList* prev;
+};
 
-typedef struct{
-  ADCoord start;
-  ADCoord end;
-}ADRangeCoord;
+struct ADBlock{
+  ADUnit        super;
+  ADInlineList* inlines;
+  uint16_t      n_inlines;
+};
 
-typedef struct ADBlock{
-  ADRange      range;
-  ADRangeCoord loc;
-  ADBlock*     next;
-  ADBlock*     prev;
-}ADBlock;
+/* ----------------------------------------------------------------------------
+ * FUNCTIONS
+ * --------------------------------------------------------------------------*/
+/**
+ * @brief Get number of inlines in this block
+ * @param block
+ * @return
+ */
+uint16_t
+ad_block_get_n_inlines(ADBlock* block);
 
-uint64_t
-ad_block_get_start(ADBlock* block);
+/**
+ * @brief Get specific inline, O(index)
+ * @param block
+ * @param index
+ * @return
+ */
+ADInline*
+ad_block_get(ADBlock* block, uint16_t index);
 
-uint64_t
-ad_block_get_end(ADBlock* block);
-
-uint32_t
-ad_block_get_start_x(ADBlock* block);
-
-uint32_t
-ad_block_get_start_y(ADBlock* block);
-
-uint32_t
-ad_block_get_end_x(ADBlock* block);
-
-uint32_t
-ad_block_get_end_y(ADBlock* block);
-
+/**
+ * @brief Get iterator for the inlines list
+ *
+ * If you want to iterate through the list of inlines, use this as the starting point
+ *
+ * @param block
+ * @return list of inlines
+ */
+ADInlineList*
+ad_block_get_list(ADBlock* block);
 
 #endif

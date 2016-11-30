@@ -25,50 +25,82 @@
 #error "Only <ad/core.h> can be included directly."
 #endif
 
-#ifndef AD_CONTAINER_H
-#define AD_CONTAINER_H
+#ifndef AD_UNIT_H
+#define AD_UNIT_H
 
-#include <stdint.h>
 #include <ad/core.h>
 
-#define AD_CONTAINER(x) ((ADContainer*)x)
+#define AD_UNIT(x) ((ADUnit*)x)
 
-typedef struct ADBlockList ADBlockList;
-struct ADBlockList{
-  ADBlock     *block;
-  ADBlockList *prev;
-  ADBlockList *next;
-};
+typedef enum{
+  AD_TYPE_PARAGRAPH,
+  AD_TYPE_HEADER,
+  AD_TYPE_TEXT,
+  AD_TYPE_LIST,
+  AD_TYPE_LIST_ITEM,
+  AD_TYPE_EMPHASIS,
+  AD_TYPE_STRONG,
+  AD_TYPE_QUOTE,
+  AD_TYPE_FIGURE,
+  AD_TYPE_SUBFIGURE,
+  AD_TYPE_EQUATION,
+  AD_TYPE_EQUATION_INLINE,
+  AD_TYPE_CODE_SPAN,
+  AD_TYPE_CODE,
+  AD_TYPE_DOCUMENT,
+  AD_TYPE_MATH_INLINE,
+  AD_TYPE_MATH,
+  AD_TYPE_LINK_DEF,
+  AD_TYPE_LINK,
+} ADUnitType;
 
-typedef struct ADContainer{
-  ADBlock      super;
-  ADBlockList* list;
-  uint16_t     n_blocks;
-}ADContainer;
+typedef struct{
+  ADRange super;
+  ADUnitType type;
+}ADUnit;
 
-/**
- * @brief Get number of blocks
- * @param container
- * @return
- */
-uint16_t
-ad_container_get_n_blocks(ADContainer* container);
+uint64_t
+ad_unit_get_start(ADUnit* unit);
 
-/**
- * @brief ad_container_get
- * @param container
- * @param index
- * @return
- */
-ADBlock*
-ad_container_get(ADContainer* container, uint16_t index);
+uint64_t
+ad_unit_get_end(ADUnit* unit);
 
-/**
- * @brief ad_container_get_list
- * @param container
- * @return
- */
-ADBlockList*
-ad_container_get_list(ADContainer* container);
+uint32_t
+ad_unit_get_start_x(ADUnit* unit);
+
+uint32_t
+ad_unit_get_start_y(ADUnit* unit);
+
+uint32_t
+ad_unit_get_end_x(ADUnit* unit);
+
+uint32_t
+ad_unit_get_end_y(ADUnit* unit);
+
+ADUnitType
+ad_unit_get_type(ADUnit* unit);
+
+uint64_t
+ad_unit_set_start(ADUnit* unit, uint64_t value);
+
+uint64_t
+ad_unit_set_end(ADUnit* unit, uint64_t value);
+
+uint32_t
+ad_unit_set_start_x(ADUnit* unit, uint32_t value);
+
+uint32_t
+ad_unit_set_start_y(ADUnit* unit, uint32_t value);
+
+uint32_t
+ad_unit_set_end_x(ADUnit* unit, uint32_t value);
+
+uint32_t
+ad_unit_set_end_y(ADUnit* unit, uint32_t value);
+
+ADUnitType
+ad_unit_set_type(ADUnit* unit, ADUnitType type);
+
+
 
 #endif

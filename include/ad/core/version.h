@@ -21,6 +21,9 @@
  ** DEALINGS IN THE SOFTWARE.
  **/
 
+#if !defined(AD_CORE_H_INSIDE)
+#error "Only <ad/core.h> can be included directly."
+#endif
 
 #ifndef AD_VERSION_H
 #define AD_VERSION_H

@@ -21,14 +21,24 @@
  ** DEALINGS IN THE SOFTWARE.
  **/
 
+#if !defined(AD_CORE_H_INSIDE)
+#error "Only <ad/core.h> can be included directly."
+#endif
+
 #ifndef AD_DOCUMENT_H
 #define AD_DOCUMENT_H
 
 #include <ad/core.h>
 
 struct ADDocument{
-  const  char* text;
-  ADBlock* children;
+  ADContainer parent;
+  const char* text;
 };
+
+typedef struct ADDocument ADDocument;
+
+
+ADDocument*
+ad_document_new_from_text(char *text, uint64_t max_length);
 
 #endif

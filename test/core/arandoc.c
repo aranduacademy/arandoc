@@ -32,20 +32,20 @@ test_parse(){
   ADDocument* document = ad_document_new_from_text(texto, 14);
 
   // Range tests
-  g_assert_cmpuint(document->range.start,==, 0);
-  g_assert_cmpuint(document->range.end  ,==,14);
-  g_assert_cmpuint(document->loc.start.x,==, 0);
-  g_assert_cmpuint(document->loc.start.y,==, 0);
-  g_assert_cmpuint(document->loc.end.x  ,==, 8);
-  g_assert_cmpuint(document->loc.end.y  ,==, 1);
+  g_assert_cmpuint(ad_block_get_start  (AD_BLOCK(document)),==, 0);
+  g_assert_cmpuint(ad_block_get_end    (AD_BLOCK(document)),==,14);
+  g_assert_cmpuint(ad_block_get_start_x(AD_BLOCK(document)),==, 0);
+  g_assert_cmpuint(ad_block_get_start_y(AD_BLOCK(document)),==, 0);
+  g_assert_cmpuint(ad_block_get_end_x  (AD_BLOCK(document)),==, 8);
+  g_assert_cmpuint(ad_block_get_end_y  (AD_BLOCK(document)),==, 1);
 
   // Children tests
-  g_assert_cmpuint(document->n_children ,==, 2);
-  g_assert_cmpuint(document->children[0].type,==, AD_TYPE_HEADER);
-  g_assert_cmpuint(document->children[1].type,==, AD_TYPE_PARAGRAPH);
+  g_assert_cmpuint(ad_container_get_n_children(document),==, 2);
+  g_assert_cmpuint(ad_container_get(document,0)->type,==, AD_TYPE_HEADER);
+  g_assert_cmpuint(ad_container_get(document,1)->type,==, AD_TYPE_PARAGRAPH);
 
   // # oi
-  ADHeader* header = document->children[0];
+  ADHeader* header = ad_container_get(document,0);
   g_assert_cmpuint(header->depth,==,1);
   g_assert_cmpuint(header->n_children,==,1);
   // oi

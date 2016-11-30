@@ -21,8 +21,16 @@
  ** DEALINGS IN THE SOFTWARE.
  **/
 
+#if !defined(AD_CORE_H_INSIDE)
+#error "Only <ad/core.h> can be included directly."
+#endif
+
 #ifndef AD_BLOCK_H
 #define AD_BLOCK_H
+
+#include <stdint.h>
+
+#define AD_BLOCK(x) ((ADBlock*)x)
 
 typedef enum{
   AD_TYPE_PARAGRAPH,
@@ -32,10 +40,45 @@ typedef enum{
   AD_TYPE
 } ADBlockType;
 
-struct ADBlock{
+typedef struct{
+  uint64_t start;
+  uint64_t end;
+}ADRange;
 
-};
+typedef struct{
+  uint32_t x;
+  uint32_t y;
+}ADCoord;
 
-typedef struct ADBlock ADBlock;
+typedef struct{
+  ADCoord start;
+  ADCoord end;
+}ADRangeCoord;
+
+typedef struct ADBlock{
+  ADRange      range;
+  ADRangeCoord loc;
+  ADBlock*     next;
+  ADBlock*     prev;
+}ADBlock;
+
+uint64_t
+ad_block_get_start(ADBlock* block);
+
+uint64_t
+ad_block_get_end(ADBlock* block);
+
+uint32_t
+ad_block_get_start_x(ADBlock* block);
+
+uint32_t
+ad_block_get_start_y(ADBlock* block);
+
+uint32_t
+ad_block_get_end_x(ADBlock* block);
+
+uint32_t
+ad_block_get_end_y(ADBlock* block);
+
 
 #endif

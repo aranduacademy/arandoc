@@ -21,15 +21,39 @@
  ** DEALINGS IN THE SOFTWARE.
  **/
 
+#if !defined(AD_CORE_H_INSIDE)
+#error "Only <ad/core.h> can be included directly."
+#endif
+
 #ifndef AD_CONTAINER_H
 #define AD_CONTAINER_H
 
 #include <stdint.h>
 #include <ad/core.h>
 
-struct ADContainer{
-  ADBlock* children;
-  uint8_t  n_children;
-};
+#define AD_CONTAINER(x) ((ADContainer*)x)
+
+typedef struct ADContainer{
+  ADBlock   parent;
+  ADBlock*  children;
+  uint16_t  n_children;
+}ADContainer;
+
+/**
+ * @brief ad_container_get_n_children
+ * @param container
+ * @return
+ */
+uint16_t
+ad_container_get_n_children(ADContainer* container);
+
+/**
+ * @brief ad_container_get
+ * @param container
+ * @param index
+ * @return
+ */
+ADBlock*
+ad_container_get(ADContainer* container, uint16_t index);
 
 #endif

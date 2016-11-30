@@ -41,6 +41,13 @@
 #include <ad/core/list.h>
 #endif
 #ifndef AD_CROSSREF_H
+#include <ad/core/crossref.h>
+#endif
+#ifndef AD_FIGURE_H
+#include <ad/core/figure.h>
+#endif
+#ifndef AD_EQUATION_H
+#include <ad/core/equation.h>
 #endif
 #ifndef AD_DOCUMENT_H
 #include <ad/core/document.h>
